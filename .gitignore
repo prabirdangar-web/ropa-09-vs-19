@@ -1,18 +1,504 @@
-# Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Official ROPA-19 Pension Revision Audit Statement</title>
+    <style>
+        :root {
+            --navy-blue: #1e3a8a;
+            --gold: #b45309;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #0f172a;
+            --border-color: #cbd5e1;
+            --success-bg: #f0fdf4;
+            --success-border: #bbf7d0;
+            --orange-alert: #fff7ed;
+        }
 
-# Other files and folders
-.settings/
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 24px;
+            line-height: 1.5;
+        }
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
+        .wrapper {
+            max-width: 950px;
+            margin: 0 auto;
+        }
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+        .header-panel {
+            background: linear-gradient(135deg, var(--navy-blue), #1e40af);
+            color: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            text-align: center;
+            border-bottom: 4px solid var(--gold);
+            margin-bottom: 24px;
+        }
+
+        .header-panel h1 {
+            margin: 0;
+            font-size: 1.6rem;
+            letter-spacing: 0.5px;
+        }
+
+        .header-panel p {
+            margin: 6px 0 0 0;
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--navy-blue);
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        @media(max-width: 768px) {
+            .form-row { grid-template-columns: 1fr; }
+            .parallel-outputs { grid-template-columns: 1fr !important; }
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: #334155;
+        }
+
+        input[type="number"], select {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: #fff;
+            box-sizing: border-box;
+        }
+
+        .conversion-preview-bar {
+            background: #f1f5f9;
+            border: 1px dashed var(--navy-blue);
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            text-align: center;
+        }
+
+        .preview-stat {
+            font-size: 0.85rem;
+            color: #475569;
+        }
+
+        .preview-stat strong {
+            display: block;
+            font-size: 1.25rem;
+            color: var(--navy-blue);
+            margin-top: 4px;
+        }
+
+        .parallel-outputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 12px;
+        }
+
+        .output-card {
+            padding: 16px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+        }
+
+        .output-card.highlighted {
+            background: var(--success-bg);
+            border-color: var(--success-border);
+        }
+
+        .output-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #0f172a;
+            margin-bottom: 12px;
+            text-align: center;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 6px;
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .breakdown-row.total-row {
+            border-top: 2px solid #cbd5e1;
+            padding-top: 8px;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #166534;
+        }
+
+        .breakdown-row.deduction-row {
+            color: #b91c1c;
+        }
+
+        .delta-card {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 6px;
+            padding: 16px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .delta-value {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #1e40af;
+            margin: 4px 0;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .print-btn {
+            background-color: var(--navy-blue);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background 0.2s;
+        }
+
+        .print-btn:hover {
+            background-color: #1e40af;
+        }
+
+        /* PRINT STYLESHEET OVERRIDE */
+        @media print {
+            body {
+                background: white;
+                color: black;
+                padding: 0;
+            }
+            .header-panel, .card:not(#printArea), .btn-container, .card-title, .form-row, .conversion-preview-bar {
+                display: none !important;
+            }
+            .card {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+            }
+            .parallel-outputs {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 30px !important;
+            }
+            .output-card {
+                border: 1px solid black !important;
+                background: white !important;
+                color: black !important;
+            }
+            .output-title {
+                border-bottom: 1px solid black !important;
+                color: black !important;
+            }
+            .breakdown-row.total-row {
+                border-top: 2px solid black !important;
+                color: black !important;
+            }
+            .breakdown-row.deduction-row {
+                color: black !important;
+            }
+            .delta-card {
+                border: 1px dashed black !important;
+                background: white !important;
+                color: black !important;
+                margin-top: 30px !important;
+            }
+            .delta-value {
+                color: black !important;
+            }
+            #printHeader {
+                display: block !important;
+                text-align: center;
+                margin-bottom: 30px;
+                border-bottom: 2px solid black;
+                padding-bottom: 10px;
+            }
+        }
+
+        #printHeader {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="header-panel">
+        <h1>ROPA-19 Retired Pension Audit Statement</h1>
+        <p>Strict Multi-Era Fixation Rules (2.57 Conversion Factor & Step-Up Ceiling Logic)</p>
+    </div>
+
+    <!-- PARAMETERS CARD -->
+    <div class="card">
+        <div class="card-title">1. Audit Parameters Input (ROPA 2009 Base Data)</div>
+        
+        <div class="form-row">
+            <div class="input-group">
+                <label for="ppoBasic09">Full ROPA-09 PPO Basic Pay Baseline (₹)</label>
+                <input type="number" id="ppoBasic09" value="28860" min="0" oninput="runPensionFixationPipeline()">
+            </div>
+            <div class="input-group">
+                <label for="commutationPercent">Commutation Percentage (%)</label>
+                <input type="number" id="commutationPercent" value="40" min="0" max="40" step="0.01" oninput="runPensionFixationPipeline()">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="input-group">
+                <label for="medAllowance">Medical Allowance (M.A.)</label>
+                <select id="medAllowance" onchange="runPensionFixationPipeline()">
+                    <option value="500">Admissible (₹500)</option>
+                    <option value="0">Blank / Non-Admissible (₹0)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <div class="form-row" style="margin: 0; gap: 10px;">
+                    <div class="input-group">
+                        <label for="currentDR">Current DR %</label>
+                        <input type="number" id="currentDR" value="18" min="0" oninput="runPensionFixationPipeline()">
+                    </div>
+                    <div class="input-group">
+                        <label for="parallelDR">Revised DR %</label>
+                        <input type="number" id="parallelDR" value="38" min="0" oninput="runPensionFixationPipeline()">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUDIT RESULT CARD -->
+    <div class="card" id="printArea">
+        <!-- Official Print Header (Visible only when saved/printed) -->
+        <div id="printHeader">
+            <h2>PENSION REVISION AUDIT REPORT (ROPA 2019)</h2>
+            <p><strong>Original ROPA-09 PPO Basic:</strong> ₹<span id="prtPpoBasic">0</span> | <strong>Commutation Rate:</strong> <span id="prtCommPercent">0</span>% (₹<span id="prtCommAmt">0</span>)</p>
+            <p><strong>Resolved ROPA-19 Revised Basic Pension:</strong> ₹<span id="prtResolvedBP">0</span></p>
+        </div>
+
+        <div class="card-title">2. Step-by-Step Fixation Resolution Timeline</div>
+        <div class="conversion-preview-bar">
+            <div class="preview-stat">
+                Admissible ROPA-09 Base (PPO BP / 2)
+                <strong id="statPpoHalf">₹0.00</strong>
+            </div>
+            <div class="preview-stat">
+                Raw Fitment (×2.57)
+                <strong id="statRawFitment">₹0.00</strong>
+            </div>
+            <div class="preview-stat">
+                Resolved ROPA-19 BP (Ceiling Rule)
+                <strong id="statResolvedBP" style="color: #166534;">₹0</strong>
+            </div>
+        </div>
+
+        <div class="card-title">3. Parallel DR Scenario Statements</div>
+        <div class="parallel-outputs">
+            <!-- Case A: Current DR -->
+            <div class="output-card">
+                <div class="output-title">Current DR Scenario Case</div>
+                <div class="breakdown-row">
+                    <span>Revised Basic Pension:</span>
+                    <span class="view-resolved-bp" style="font-weight:600;">₹0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>DR Amount (<span id="txtCurrentDRPct">18</span>%):</span>
+                    <span id="valCurrentDR">₹0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>Medical Allowance (M.A.):</span>
+                    <span class="view-ma">₹0</span>
+                </div>
+                <div class="breakdown-row deduction-row">
+                    <span>(-) Commutation Recovery (<span class="view-comm-pct">0</span>%):</span>
+                    <span class="view-commutation">-₹0</span>
+                </div>
+                <div class="breakdown-row total-row">
+                    <span>Net Monthly Pension:</span>
+                    <span id="valCurrentNet">₹0</span>
+                </div>
+            </div>
+
+            <!-- Case B: Parallel Hiked DR -->
+            <div class="output-card highlighted">
+                <div class="output-title" style="color:#166534;">Revised DR Scenario Case</div>
+                <div class="breakdown-row">
+                    <span>Revised Basic Pension:</span>
+                    <span class="view-resolved-bp" style="font-weight:600;">₹0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>DR Amount (<span id="txtParallelDRPct">38</span>%):</span>
+                    <span id="valParallelDR" style="color:#15803d; font-weight:600;">₹0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>Medical Allowance (M.A.):</span>
+                    <span class="view-ma">₹0</span>
+                </div>
+                <div class="breakdown-row deduction-row">
+                    <span>(-) Commutation Recovery (<span class="view-comm-pct">0</span>%):</span>
+                    <span class="view-commutation">-₹0</span>
+                </div>
+                <div class="breakdown-row total-row" style="color:#14532d; border-top-color:#bbf7d0;">
+                    <span>Net Monthly Pension:</span>
+                    <span id="valParallelNet">₹0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- DYNAMIC INCREMENTAL TRACK CARD -->
+        <div class="delta-card">
+            <span style="font-weight: 600; color: #374151; font-size: 0.95rem;">Net Monthly Pension Increase Benefit</span>
+            <div class="delta-value" id="valNetIncrease">₹0</div>
+            <span style="font-size: 0.82rem; color: #4b5563; font-style: italic;">
+                Reflects clear monthly gains yielded from strict fractional round-up ceilings between selected rates.
+            </span>
+        </div>
+    </div>
+
+    <!-- BUTTONS SECTION -->
+    <div class="btn-container">
+        <button class="print-btn" onclick="window.print()">Print / Save Audit Sheet</button>
+    </div>
+</div>
+
+<script>
+    function processStrictTenMultipleRounding(val) {
+        if (val <= 0) return 0;
+        
+        let integerPart = Math.floor(val);
+        let fractionalPart = val - integerPart;
+        
+        fractionalPart = Math.round(fractionalPart * 100) / 100;
+
+        if (integerPart % 10 === 0) {
+            return integerPart;
+        } else {
+            let remainder = integerPart % 10;
+            return (integerPart - remainder) + 10;
+        }
+    }
+
+    function calculateCustomCeilingDR(basePension, ratePercent) {
+        let rawDRAmt = basePension * (ratePercent / 100);
+        let integerPart = Math.floor(rawDRAmt);
+        let fractionalPart = rawDRAmt - integerPart;
+        
+        fractionalPart = Math.round(fractionalPart * 100) / 100;
+        
+        if (fractionalPart > 0) {
+            return integerPart + 1; 
+        }
+        return integerPart;
+    }
+
+    function runPensionFixationPipeline() {
+        const ppoFullBase = parseFloat(document.getElementById('ppoBasic09').value) || 0;
+        const commPercent = parseFloat(document.getElementById('commutationPercent').value) || 0;
+        
+        const ppoHalfBase = ppoFullBase / 2;
+        const calculatedCommutation = Math.round(ppoHalfBase * (commPercent / 100));
+        const rawFitment = ppoHalfBase * 2.57;
+        const fixedRevisedPension = processStrictTenMultipleRounding(rawFitment);
+
+        const ma = parseFloat(document.getElementById('medAllowance').value) || 0;
+        const drRateCurrent = parseFloat(document.getElementById('currentDR').value) || 0;
+        const drRateParallel = parseFloat(document.getElementById('parallelDR').value) || 0;
+
+        const drAmtCurrent = calculateCustomCeilingDR(fixedRevisedPension, drRateCurrent);
+        const netCurrent = fixedRevisedPension + drAmtCurrent + ma - calculatedCommutation;
+        const verifiedNetCurrent = netCurrent < 0 ? 0 : netCurrent;
+
+        const drAmtParallel = calculateCustomCeilingDR(fixedRevisedPension, drRateParallel);
+        const netParallel = fixedRevisedPension + drAmtParallel + ma - calculatedCommutation;
+        const verifiedNetParallel = netParallel < 0 ? 0 : netParallel;
+
+        // Calculate dynamic net increase benefit
+        const netIncreaseBenefit = verifiedNetParallel - verifiedNetCurrent;
+
+        document.getElementById('statPpoHalf').innerText = "₹" + ppoHalfBase.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('statRawFitment').innerText = "₹" + rawFitment.toFixed(2);
+        document.getElementById('statResolvedBP').innerText = "₹" + fixedRevisedPension.toLocaleString('en-IN');
+
+        document.querySelectorAll('.view-resolved-bp').forEach(el => el.innerText = "₹" + fixedRevisedPension.toLocaleString('en-IN'));
+        document.querySelectorAll('.view-ma').forEach(el => el.innerText = "₹" + ma.toLocaleString('en-IN'));
+        document.querySelectorAll('.view-commutation').forEach(el => el.innerText = "-₹" + calculatedCommutation.toLocaleString('en-IN'));
+        document.querySelectorAll('.view-comm-pct').forEach(el => el.innerText = commPercent);
+
+        document.getElementById('txtCurrentDRPct').innerText = drRateCurrent;
+        document.getElementById('valCurrentDR').innerText = "₹" + drAmtCurrent.toLocaleString('en-IN');
+        document.getElementById('valCurrentNet').innerText = "₹" + verifiedNetCurrent.toLocaleString('en-IN');
+
+        document.getElementById('txtParallelDRPct').innerText = drRateParallel;
+        document.getElementById('valParallelDR').innerText = "₹" + drAmtParallel.toLocaleString('en-IN');
+        document.getElementById('valParallelNet').innerText = "₹" + verifiedNetParallel.toLocaleString('en-IN');
+        
+        // Push net difference out to view elements
+        document.getElementById('valNetIncrease').innerText = "₹" + netIncreaseBenefit.toLocaleString('en-IN');
+
+        document.getElementById('prtPpoBasic').innerText = ppoFullBase.toLocaleString('en-IN');
+        document.getElementById('prtCommPercent').innerText = commPercent;
+        document.getElementById('prtCommAmt').innerText = calculatedCommutation.toLocaleString('en-IN');
+        document.getElementById('prtResolvedBP').innerText = fixedRevisedPension.toLocaleString('en-IN');
+    }
+
+    window.onload = function() {
+        runPensionFixationPipeline();
+    };
+</script>
+
+</body>
+</html>
